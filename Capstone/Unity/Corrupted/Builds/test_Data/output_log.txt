@@ -1,0 +1,34 @@
+Initialize engine version: 5.0.1f1 (5a2e8fe35a68)
+GfxDevice: creating device client; threaded=1
+Direct3D:
+    Version:  Direct3D 11.0 [level 11.0]
+    Renderer: Intel(R) HD Graphics 5500 (ID=0x1616)
+    Vendor:   Intel
+    VRAM:     1919 MB
+Begin MonoManager ReloadAssembly
+Platform assembly: C:\Users\duong\OneDrive\Documents\Capstone\Unity\Corrupted\Builds\test_Data\Managed\UnityEngine.dll (this message is harmless)
+Loading C:\Users\duong\OneDrive\Documents\Capstone\Unity\Corrupted\Builds\test_Data\Managed\UnityEngine.dll into Unity Child Domain
+Platform assembly: C:\Users\duong\OneDrive\Documents\Capstone\Unity\Corrupted\Builds\test_Data\Managed\Assembly-CSharp.dll (this message is harmless)
+Loading C:\Users\duong\OneDrive\Documents\Capstone\Unity\Corrupted\Builds\test_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
+Platform assembly: C:\Users\duong\OneDrive\Documents\Capstone\Unity\Corrupted\Builds\test_Data\Managed\UnityEngine.UI.dll (this message is harmless)
+Loading C:\Users\duong\OneDrive\Documents\Capstone\Unity\Corrupted\Builds\test_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
+- Completed reload, in  0.188 seconds
+desktop: 1920x1080 60Hz; virtual: 1920x1080 at 0,0
+<RI> Initializing input.
+XInput1_3.dll not found. Trying XInput9_1_0.dll instead...
+<RI> Input initialized.
+<RI> Initialized touch support.
+Platform assembly: C:\Users\duong\OneDrive\Documents\Capstone\Unity\Corrupted\Builds\test_Data\Managed\System.Core.dll (this message is harmless)
+Platform assembly: C:\Users\duong\OneDrive\Documents\Capstone\Unity\Corrupted\Builds\test_Data\Managed\System.dll (this message is harmless)
+Unloading 4 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 8.293079 ms
+
+Unloading 255 unused Assets to reduce memory usage. Loaded Objects now: 131.
+Total: 0.923267 ms (FindLiveObjects: 0.085841 ms CreateObjectMapping: 0.075578 ms MarkObjects: 0.239797 ms  DeleteObjects: 0.520650 ms)
+
+Unloading 1 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 0.294848 ms
+
+Unloading 4 unused Assets to reduce memory usage. Loaded Objects now: 175.
+Total: 0.253793 ms (FindLiveObjects: 0.021460 ms CreateObjectMapping: 0.018194 ms MarkObjects: 0.201541 ms  DeleteObjects: 0.010730 ms)
+

@@ -1,0 +1,174 @@
+fileFormatVersion: 2
+guid: 9875423a6e80c204987a4725f57d674c
+timeCreated: 1431369005
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: BurstVirus3_0
+    21300002: BurstVirus3_1
+    21300004: BurstVirus3_2
+    21300006: BurstVirus3_3
+    21300008: BurstVirus3_4
+    21300010: BurstVirus3_5
+    21300012: BurstVirus3_6
+    21300014: BurstVirus3_7
+    21300016: BurstVirus3_8
+    21300018: BurstVirus3_9
+    21300020: BurstVirus3_10
+    21300022: BurstVirus3_11
+    21300024: BurstVirus3_12
+    21300026: BurstVirus3_13
+    21300028: BurstVirus3_14
+    21300030: BurstVirus3_15
+    21300032: BurstVirus3_16
+    21300034: BurstVirus3_17
+    21300036: BurstVirus3_18
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 8
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -3
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: 1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: BurstVirus3_0
+      rect:
+        serializedVersion: 2
+        x: 4
+        y: 2
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: BurstVirus3_1
+      rect:
+        serializedVersion: 2
+        x: 76
+        y: 2
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: BurstVirus3_2
+      rect:
+        serializedVersion: 2
+        x: 148
+        y: 2
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: BurstVirus3_3
+      rect:
+        serializedVersion: 2
+        x: 220
+        y: 2
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: BurstVirus3_4
+      rect:
+        serializedVersion: 2
+        x: 292
+        y: 2
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: BurstVirus3_5
+      rect:
+        serializedVersion: 2
+        x: 364
+        y: 2
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: BurstVirus3_6
+      rect:
+        serializedVersion: 2
+        x: 436
+        y: 2
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: BurstVirus3_8
+      rect:
+        serializedVersion: 2
+        x: 508
+        y: 2
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: BurstVirus3_9
+      rect:
+        serializedVersion: 2
+        x: 580
+        y: 2
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: BurstVirus3_10
+      rect:
+        serializedVersion: 2
+        x: 652
+        y: 2
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
