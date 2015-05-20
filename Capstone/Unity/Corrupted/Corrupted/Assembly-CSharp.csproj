@@ -57,6 +57,7 @@
      <Compile Include="Assets\Scripts\gameEnd.cs" />
      <Compile Include="Assets\Scripts\redTile.cs" />
      <Compile Include="Assets\Scripts\test.cs" />
+     <Compile Include="Assets\Scripts\tileDestroy.cs" />
      <Compile Include="Assets\Scripts\yellowTile.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>

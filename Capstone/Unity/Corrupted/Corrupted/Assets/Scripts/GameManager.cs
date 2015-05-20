@@ -37,6 +37,7 @@ public class GameManager : MonoBehaviour {
 
 	public bool healOn;           //bool flag for when healing is in effect
 	public GameObject healedTile; //a pointer to where the last healed game object
+	public GameObject healingAnim;//a pointer to the healing object with animation
 
 	public GameObject repairMeter;
 	// Use this for initialization
@@ -69,6 +70,9 @@ public class GameManager : MonoBehaviour {
 		firewall.GetComponent<SpriteRenderer>().enabled = false;
 
 		repairMeter = GameObject.Find ("RepairMeter");
+
+		healingAnim =  (GameObject)Instantiate(Resources.Load("Prefabs/Heal", typeof(GameObject)),new Vector2(0,0 - shiftSpace + rows/2), Quaternion.identity);
+		healingAnim.GetComponent<SpriteRenderer> ().enabled = false;
 
 		//------------------------------------Instantiating the corrupted Array----------------------------------------------
 		corruptedArray = new GameObject[totalCols][];
@@ -215,7 +219,7 @@ public class GameManager : MonoBehaviour {
 			laserFireUpdate = 5;
 		}
 
-		//updating the repair meter
+
 
 		//when burstVirus is in the game
 		if (burstVirusOn) {
@@ -253,52 +257,47 @@ public class GameManager : MonoBehaviour {
 		//Healing is in active
 		if (healOn) {
 			if(shootCount - lastshootCount > 0){
-				if(healedTile == null){
-					healedTile = null;
-					healOn = false;
-				}else{
-					int i = (int)healedTile.transform.position.x;
-					int j = (int)healedTile.transform.position.y + shiftSpace;
-					Vector2 [] posiblePath = new Vector2[8];
-					posiblePath[0] = new Vector2(i-1,j-1);
-					posiblePath[1] = new Vector2(i-1,j);
-					posiblePath[2] = new Vector2(i-1,j+1);
-					posiblePath[3] = new Vector2(i,j-1);
-					posiblePath[4] = new Vector2(i,j+1);
-					posiblePath[5] = new Vector2(i+1,j-1);
-					posiblePath[6] = new Vector2(i+1,j);
-					posiblePath[7] = new Vector2(i+1,j+1);
+				int i = (int)healingAnim.transform.position.x;
+				int j = (int)healingAnim.transform.position.y + shiftSpace;
+				Vector2 [] posiblePath = new Vector2[8];
+				posiblePath[0] = new Vector2(i-1,j-1);
+				posiblePath[1] = new Vector2(i-1,j);
+				posiblePath[2] = new Vector2(i-1,j+1);
+				posiblePath[3] = new Vector2(i,j-1);
+				posiblePath[4] = new Vector2(i,j+1);
+				posiblePath[5] = new Vector2(i+1,j-1);
+				posiblePath[6] = new Vector2(i+1,j);
+				posiblePath[7] = new Vector2(i+1,j+1);
 
-					//checks if all posible path is invalid
-					if(   ((int)posiblePath[0].x < 0 || (int)posiblePath[0].x > totalCols-1 || (int)posiblePath[0].y < 0 || (int)posiblePath[0].y > rows-1 || corruptedArray[(int)posiblePath[0].x][(int)posiblePath[0].y] == null) 
-				   	&& ((int)posiblePath[1].x < 0 || (int)posiblePath[1].x > totalCols-1 || (int)posiblePath[1].y < 0 || (int)posiblePath[1].y > rows-1 || corruptedArray[(int)posiblePath[1].x][(int)posiblePath[1].y] == null)                        
-				   	&& ((int)posiblePath[2].x < 0 || (int)posiblePath[2].x > totalCols-1 || (int)posiblePath[2].y < 0 || (int)posiblePath[2].y > rows-1 || corruptedArray[(int)posiblePath[2].x][(int)posiblePath[2].y] == null)
+				//checks if all posible path is invalid
+				if(   ((int)posiblePath[0].x < 0 || (int)posiblePath[0].x > totalCols-1 || (int)posiblePath[0].y < 0 || (int)posiblePath[0].y > rows-1 || corruptedArray[(int)posiblePath[0].x][(int)posiblePath[0].y] == null) 
+				  	&& ((int)posiblePath[1].x < 0 || (int)posiblePath[1].x > totalCols-1 || (int)posiblePath[1].y < 0 || (int)posiblePath[1].y > rows-1 || corruptedArray[(int)posiblePath[1].x][(int)posiblePath[1].y] == null)                        
+				  	&& ((int)posiblePath[2].x < 0 || (int)posiblePath[2].x > totalCols-1 || (int)posiblePath[2].y < 0 || (int)posiblePath[2].y > rows-1 || corruptedArray[(int)posiblePath[2].x][(int)posiblePath[2].y] == null)
 				   	&& ((int)posiblePath[3].x < 0 || (int)posiblePath[3].x > totalCols-1 || (int)posiblePath[3].y < 0 || (int)posiblePath[3].y > rows-1 || corruptedArray[(int)posiblePath[3].x][(int)posiblePath[3].y] == null)
 				   	&& ((int)posiblePath[4].x < 0 || (int)posiblePath[4].x > totalCols-1 || (int)posiblePath[4].y < 0 || (int)posiblePath[4].y > rows-1 || corruptedArray[(int)posiblePath[4].x][(int)posiblePath[4].y] == null)
 				   	&& ((int)posiblePath[5].x < 0 || (int)posiblePath[5].x > totalCols-1 || (int)posiblePath[5].y < 0 || (int)posiblePath[5].y > rows-1 || corruptedArray[(int)posiblePath[5].x][(int)posiblePath[5].y] == null)
 				   	&& ((int)posiblePath[6].x < 0 || (int)posiblePath[6].x > totalCols-1 || (int)posiblePath[6].y < 0 || (int)posiblePath[6].y > rows-1 || corruptedArray[(int)posiblePath[6].x][(int)posiblePath[6].y] == null)
 				   	&& ((int)posiblePath[7].x < 0 || (int)posiblePath[7].x > totalCols-1 || (int)posiblePath[7].y < 0 || (int)posiblePath[7].y > rows-1 || corruptedArray[(int)posiblePath[7].x][(int)posiblePath[7].y] == null)){
-						healOn = false;
-					}else{
-						bool found = false;
-						Vector2 destination = posiblePath[0];
-						while(!found){
-							destination = posiblePath[Random.Range(0,7)];
-							if ((int)destination.x < 0 || (int)destination.x > totalCols-1) 
-								continue;
-							if ((int)destination.y < 0 || (int)destination.y > rows-1)
-								continue;
-							if(corruptedArray[(int)destination.x][(int)destination.y] != null)
-								found = true;
-						}
-						healHelper((int)destination.x,(int)destination.y);
-						deleteCorruption ((int)destination.x,(int)destination.y);
-						findTileCountOnce = false;
-
-					}	
-					if(corruptionCount == 0){
-						healOn = false;
+					healOn = false;
+					healingAnim.GetComponent<SpriteRenderer>().enabled = false;
+				}else{
+					bool found = false;
+					Vector2 destination = posiblePath[0];
+					while(!found){
+						destination = posiblePath[Random.Range(0,posiblePath.Length)];
+						if ((int)destination.x < 0 || (int)destination.x > totalCols-1) 
+							continue;
+						if ((int)destination.y < 0 || (int)destination.y > rows-1)
+							continue;
+						if(corruptedArray[(int)destination.x][(int)destination.y] != null)
+							found = true;
 					}
+					healHelper((int)destination.x,(int)destination.y);
+					deleteCorruption ((int)destination.x,(int)destination.y);
+					findTileCountOnce = false;
+				}	
+				if(corruptionCount == 0){
+					healOn = false;
 				}
 			}
 		}
@@ -430,7 +429,6 @@ public class GameManager : MonoBehaviour {
 		//has three or more objects -> delete
 		if (count >= 3) {
 			clear.Play();
-
 			clearCount++;
 			repairMeter.GetComponent<RepairMeter>().index++;
 
@@ -901,12 +899,15 @@ public class GameManager : MonoBehaviour {
 				found = true;
 			}
 		}
+		healingAnim.transform.position = new Vector3 (i, j - shiftSpace, -2);
+		healingAnim.GetComponent<SpriteRenderer> ().enabled = true;
 		healHelper (i, j);
 		deleteCorruption (i, j);
 		findTileCountOnce = false;
 	}
 
 	private void healHelper(int i, int j){
+		healingAnim.transform.position = Vector3.Lerp (healingAnim.transform.position, new Vector3 (i, j - shiftSpace, -2), 1f);
 		healedTile = player.GetComponent<Cannon> ().createTile ();
 		healedTile.transform.position = new Vector3 (i, j - shiftSpace, 0);
 		if(pieces[i][j] != null)
