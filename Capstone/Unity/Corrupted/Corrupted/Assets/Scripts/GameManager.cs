@@ -421,7 +421,7 @@ public class GameManager : MonoBehaviour {
 		if (j < 0 || j > rows-1)
 			return;
 
-		GameObject[] list = new GameObject[256*2];
+		GameObject[] list = new GameObject[256*5];
 		string name = pieces [i] [j].GetComponent<Tile> ().name;
 		int count = 0;
 		//call helper method to find and add more gameObject to the list
