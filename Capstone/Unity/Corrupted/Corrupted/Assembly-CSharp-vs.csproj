@@ -51,7 +51,10 @@
      <Compile Include="Assets\Scripts\CorruptionMarker.cs" />
      <Compile Include="Assets\Scripts\GameManager.cs" />
      <Compile Include="Assets\Scripts\RepairMeter.cs" />
+     <Compile Include="Assets\Scripts\RowMeter.cs" />
+     <Compile Include="Assets\Scripts\RowText.cs" />
      <Compile Include="Assets\Scripts\Tile.cs" />
+     <Compile Include="Assets\Scripts\bg1.cs" />
      <Compile Include="Assets\Scripts\blueTile.cs" />
      <Compile Include="Assets\Scripts\burstVirus.cs" />
      <Compile Include="Assets\Scripts\gameEnd.cs" />

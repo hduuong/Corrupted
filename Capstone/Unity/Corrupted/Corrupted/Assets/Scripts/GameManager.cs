@@ -7,7 +7,7 @@ public class GameManager : MonoBehaviour {
 	public int offsetSpace;        //the space between the tiles and the player
 	public int shiftSpace;         //the space that use to shift from the origin
 	public int totalCols;          //the total collumns of the array
-	public int lastVisibleCols;    //the last visible collumn in game
+	public int visibleCols;        //the number of visible collumn in game
 	public GameObject player;      //the player
 	public GameObject [][] pieces; //the backend Array that store all game objects
 	public GameObject [][] corruptedArray;//the backend Array that keeps track of corrupted area
@@ -45,6 +45,7 @@ public class GameManager : MonoBehaviour {
 		firewallisOn = false;
 		burstVirusOn = false;
 		healOn = false;
+		visibleCols = offsetSpace + 8;     //8 is the number of visible cols at game start
 		burstVirusCount = 6;
 		redOut = 0;
 		blueOut = 0;
@@ -83,7 +84,7 @@ public class GameManager : MonoBehaviour {
 		burstVirusArray = new GameObject[4];
 		//------------------------------------Instantiating the Titles----------------------------------------------
 		pieces = new GameObject[totalCols][];
-		cubes = Resources.LoadAll ("Prefabs/Color Cubes", typeof(GameObject));
+		cubes = Resources.LoadAll ("Prefabs/Tile", typeof(GameObject));
 		for (int i = offsetSpace; i < totalCols; i++) {
 			pieces[i] = new GameObject[rows];
 			for (int j = 0; j < rows; j++) {
@@ -327,7 +328,7 @@ public class GameManager : MonoBehaviour {
 			burstVirusOn = true;
 		}
 		//pressed this key to add BurstVirus --- for testing only
-		if(Input.GetKeyUp(KeyCode.H)){
+		if(Input.GetMouseButtonUp(1)){
 			if(repairMeter.GetComponent<RepairMeter>().full){
 				heal();
 			}
@@ -621,6 +622,10 @@ public class GameManager : MonoBehaviour {
 	//shift all gameobjects in array back one index
 	public void pushArrayDown(){
 		bool landOnFirewall = false;
+		//CHANGE the 3D text
+		GameObject text = GameObject.Find ("Row Text");
+		text.GetComponent<RowText> ().change ();
+
 		//PUSH the Tile array
 		for (int j = 0; j < rows; j++) {
 			for(int i = 2; i < totalCols - 1; i++){
@@ -641,6 +646,9 @@ public class GameManager : MonoBehaviour {
 		if (landOnFirewall)
 			deleteAtFireWall ();
 
+		//UPDATE the row meter
+		GameObject rowmeter = GameObject.Find ("Row Meter");
+		rowmeter.GetComponent<RowMeter> ().pushedCols ++;
 
 		//PUSH the corrupted array also
 		for (int j = 0; j < rows; j++) {
@@ -688,7 +696,7 @@ public class GameManager : MonoBehaviour {
 		string color;
 		//picks a random tile in game
 		while (!found) {
-			i = Random.Range (offsetSpace, totalCols);
+			i = Random.Range (offsetSpace, visibleCols);
 			j = Random.Range (0, rows);
 			if (pieces [i] [j] != null) {
 				go = pieces [i] [j];
@@ -774,7 +782,7 @@ public class GameManager : MonoBehaviour {
 			yellowOut++;
 		} else {
 		}
-		pieces[i][j].GetComponent<MeshRenderer>().enabled = false;
+		pieces[i][j].GetComponent<SpriteRenderer>().enabled = false;
 		
 		if (burstVirusArray[index] != null) {
 			Destroy(burstVirusArray[index]);
@@ -893,7 +901,7 @@ public class GameManager : MonoBehaviour {
 		int j = 0;
 		//picks a random corrupted indexes in game
 		while (!found) {
-			i = Random.Range (0, totalCols);
+			i = Random.Range (0, visibleCols);
 			j = Random.Range (0, rows);
 			if (corruptedArray [i] [j] != null) {
 				found = true;

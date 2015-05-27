@@ -26,11 +26,11 @@ public class Cannon : MonoBehaviour {
 
 		gameManager = GameObject.Find ("GameManager");
 		shift = gameManager.GetComponent<GameManager> ().shiftSpace;
-		cubes = Resources.LoadAll ("Prefabs/Color Cubes", typeof(GameObject));
+		cubes = Resources.LoadAll ("Prefabs/Tile", typeof(GameObject));
 		projectTile = (GameObject)Instantiate (cubes[Random.Range(0,3)], new Vector2(xPos,yPos), Quaternion.identity);
 		projectTile.name = (gameManager.GetComponent<GameManager> ().nameCounter++).ToString();
 		projectTile.transform.parent = this.transform;
-		projectTile.GetComponent<MeshRenderer>().enabled = false;
+		projectTile.GetComponent<SpriteRenderer>().enabled = false;
 		gameManager.GetComponent<GameManager> ().updateLaser ();
 	}
 	
@@ -66,7 +66,7 @@ public class Cannon : MonoBehaviour {
 			shoot.Play();
 			shot = true;
 			turnCounter++;
-			projectTile.GetComponent<MeshRenderer>().enabled = true;
+			projectTile.GetComponent<SpriteRenderer>().enabled = true;
 			//
 			if(gameManager.GetComponent<GameManager>().addTile(projectTile)){
 				makeTile();
@@ -93,27 +93,27 @@ public class Cannon : MonoBehaviour {
 			return;
 		if (blueOut == 0 && redOut == 0 && yellowOut != 0) {
 			cubes = new Object[1];
-			cubes[0] = Resources.Load ("Prefabs/Color Cubes/yellow", typeof(GameObject));
+			cubes[0] = Resources.Load ("Prefabs/Tile/TileTintYellow", typeof(GameObject));
 		} else if (blueOut == 0 && redOut != 0 && yellowOut == 0) {
 			cubes = new Object[1];
-			cubes[0] = Resources.Load ("Prefabs/Color Cubes/red", typeof(GameObject));
+			cubes[0] = Resources.Load ("Prefabs/Tile/TileTintRed", typeof(GameObject));
 		} else if (blueOut == 0 && redOut != 0 && yellowOut != 0) {
 			cubes = new Object[2];
-			cubes[0] = Resources.Load ("Prefabs/Color Cubes/yellow", typeof(GameObject));
-			cubes[1] = Resources.Load ("Prefabs/Color Cubes/red", typeof(GameObject));
+			cubes[0] = Resources.Load ("Prefabs/Tile/TileTintYellow", typeof(GameObject));
+			cubes[1] = Resources.Load ("Prefabs/Tile/TileTintRed", typeof(GameObject));
 		} else if (blueOut != 0 && redOut == 0 && yellowOut == 0) {
 			cubes = new Object[1];
-			cubes[0] = Resources.Load ("Prefabs/Color Cubes/blue", typeof(GameObject));
+			cubes[0] = Resources.Load ("Prefabs/Tile/TileTintBlue", typeof(GameObject));
 		} else if (blueOut != 0 && redOut == 0 && yellowOut != 0) {
 			cubes = new Object[2];
-			cubes[0] = Resources.Load ("Prefabs/Color Cubes/blue", typeof(GameObject));
-			cubes[1] = Resources.Load ("Prefabs/Color Cubes/yellow", typeof(GameObject));
+			cubes[0] = Resources.Load ("Prefabs/Tile/TileTintBlue", typeof(GameObject));
+			cubes[1] = Resources.Load ("Prefabs/Tile/TileTintYellow", typeof(GameObject));
 		} else if (blueOut != 0 && redOut != 0 && yellowOut == 0) {
 			cubes = new Object[2];
-			cubes[0] = Resources.Load ("Prefabs/Color Cubes/blue", typeof(GameObject));
-			cubes[1] = Resources.Load ("Prefabs/Color Cubes/red", typeof(GameObject));
+			cubes[0] = Resources.Load ("Prefabs/Tile/TileTintBlue", typeof(GameObject));
+			cubes[1] = Resources.Load ("Prefabs/Tile/TileTintRed", typeof(GameObject));
 		} else {
-			cubes = Resources.LoadAll ("Prefabs/Color Cubes", typeof(GameObject));
+			cubes = Resources.LoadAll ("Prefabs/Tile", typeof(GameObject));
 		}
 	}
 
@@ -129,7 +129,7 @@ public class Cannon : MonoBehaviour {
 		else {}
 		projectTile.name = (gameManager.GetComponent<GameManager> ().nameCounter++).ToString();
 		projectTile.transform.parent = this.transform;   //stick it with the player so it moves along with the control
-		projectTile.GetComponent<MeshRenderer>().enabled = false;
+		projectTile.GetComponent<SpriteRenderer>().enabled = false;
 		gameManager.GetComponent<GameManager>().updateLaser();
 	}
 

@@ -54,20 +54,23 @@ public class Tile : MonoBehaviour {
 	// Update is called once per frame
 	protected void Update () {
 		if (toDelete) {
-			this.GetComponent<MeshRenderer>().enabled = false;
-
-			GameObject go = (GameObject)Instantiate (Resources.Load ("Prefabs/TileDestroy"));
-			go.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, -2);
-
+			if(this.GetComponent<SpriteRenderer>().enabled != false){
+				GameObject go = (GameObject)Instantiate (Resources.Load ("Prefabs/TileDestroy"));
+				go.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, -2);
+				if(this.name == "blue"){
+					go.GetComponent<SpriteRenderer>().color = Color.blue;
+				}else if (this.name == "red"){
+					go.GetComponent<SpriteRenderer>().color = Color.red;
+				}else if (this.name == "yellow"){
+					go.GetComponent<SpriteRenderer>().color = Color.yellow;
+				}else {}
+			}
 			if(this.name == "blue"){
 				gameManager.GetComponent<GameManager>().blueOut--;
-				go.GetComponent<SpriteRenderer>().color = Color.blue;
 			}else if (this.name == "red"){
 				gameManager.GetComponent<GameManager>().redOut--;
-				go.GetComponent<SpriteRenderer>().color = Color.red;
 			}else if (this.name == "yellow"){
 				gameManager.GetComponent<GameManager>().yellowOut--;
-				go.GetComponent<SpriteRenderer>().color = Color.yellow;
 			}else {}
 
 			Destroy(gameObject);
