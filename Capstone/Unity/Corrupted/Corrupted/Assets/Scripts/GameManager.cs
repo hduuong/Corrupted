@@ -12,8 +12,12 @@ public class GameManager : MonoBehaviour {
 	public GameObject [][] pieces; //the backend Array that store all game objects
 	public GameObject [][] corruptedArray;//the backend Array that keeps track of corrupted area
 	public GameObject [] burstVirusArray;//the backend Array that keeps track of burst Viruses
+	public GameObject [] fuseVirusArrayUp;//the backend Array that keeps track of fuse Viruses from top
+	public GameObject [] fuseVirusArrayDown;//the backend Array that keeps track of fuse Viruses from bottom
 	public Object [] cubes;        //the array that stores assets for cube instantiation
 	public Object[] burstViruses;  //the array that stores assets for burstVirus instantiation
+	public Object[] fuseVirusesUp;   //the array that stores assets for fuseVirus instantiation
+	public Object[] fuseVirusesDown; //the array that stores assets for fuseVirus instantiation
 	public Object [] lasers;       //the array that keeps track of the laser indicator
 	public GameObject firewall;    //the firewall appears at index j = 2;
 	public AudioSource clear;      //the clear sound
@@ -35,6 +39,9 @@ public class GameManager : MonoBehaviour {
 	public bool burstVirusOn;     //bool flag for when burst Virus is On
 	public int burstVirusCount;   //counter for how long burst virus will stay, also used as index
 
+	public bool fuseVirusOn;     //bool flag for when burst Virus is On
+	public int fuseVirusCount;   //counter for how long fuse virus will stay
+
 	public bool healOn;           //bool flag for when healing is in effect
 	public GameObject healedTile; //a pointer to where the last healed game object
 	public GameObject healingAnim;//a pointer to the healing object with animation
@@ -44,9 +51,11 @@ public class GameManager : MonoBehaviour {
 	void Start () {
 		firewallisOn = false;
 		burstVirusOn = false;
+		fuseVirusOn = false;
 		healOn = false;
-		visibleCols = offsetSpace + 8;     //8 is the number of visible cols at game start
-		burstVirusCount = 6;
+		visibleCols = offsetSpace + 6;     //8 is the number of visible cols at game start
+		burstVirusCount = 5;
+		fuseVirusCount = 5;
 		redOut = 0;
 		blueOut = 0;
 		yellowOut = 0;
@@ -65,8 +74,11 @@ public class GameManager : MonoBehaviour {
 		clear.clip = Resources.Load ("Sounds/clear") as AudioClip;
 
 		burstViruses = Resources.LoadAll ("Prefabs/BurstVirus", typeof(GameObject));
+		fuseVirusesUp = Resources.LoadAll ("Prefabs/FuseVirusUp", typeof(GameObject));
+		fuseVirusesDown = Resources.LoadAll ("Prefabs/FuseVirusDown", typeof(GameObject));
 		
 		lasers = new GameObject[totalCols];
+
 		firewall = GameObject.Find ("firewall");
 		firewall.GetComponent<SpriteRenderer>().enabled = false;
 
@@ -82,6 +94,9 @@ public class GameManager : MonoBehaviour {
 		}
 		//------------------------------------Instantiating the burst Virus Array----------------------------------------------
 		burstVirusArray = new GameObject[4];
+		//------------------------------------Instantiating the fuse Virus Array----------------------------------------------
+		fuseVirusArrayUp = new GameObject[5];
+		fuseVirusArrayDown = new GameObject[5];
 		//------------------------------------Instantiating the Titles----------------------------------------------
 		pieces = new GameObject[totalCols][];
 		cubes = Resources.LoadAll ("Prefabs/Tile", typeof(GameObject));
@@ -323,17 +338,28 @@ public class GameManager : MonoBehaviour {
 		}
 
 		//pressed this key to add BurstVirus --- for testing only
-		if(Input.GetKeyUp(KeyCode.K)){
+		if(Input.GetKeyUp(KeyCode.B)){
 			addBurstVirus();
 			burstVirusOn = true;
 		}
+
 		//pressed this key to add BurstVirus --- for testing only
+		if(Input.GetKeyUp(KeyCode.F)){
+			addFuseVirus();
+			fuseVirusOn = true;
+		}
+
+		//pressed Mouse right to Heal if meter is full.
 		if(Input.GetMouseButtonUp(1)){
 			if(repairMeter.GetComponent<RepairMeter>().full){
 				heal();
 			}
 		}
 
+
+		if(Input.GetKeyUp(KeyCode.Space)){
+			pushArrayDown();
+		}
 		//winning condition
 		if (blueOut == 0 && redOut == 0 && yellowOut == 0) {
 			Application.LoadLevel("win");
@@ -860,6 +886,100 @@ public class GameManager : MonoBehaviour {
 		markCorruption ((int)v.x+1, (int)v.y+1+ shiftSpace);
 	}
 	//--------------------------------------------------------------------------------------------------------
+
+	//---------------------------------------------Burst Virus-----------------------------------------------------------
+	public void addFuseVirus(){
+		bool found1 = false;
+		bool found2 = false;
+		GameObject go1 = null;
+		GameObject go2 = null;
+		int i = 0;
+		string color;
+		//picks a set of 2 tiles in game
+		for(i = offsetSpace; i <= visibleCols; i++){
+			found1 = false;
+			found2 = false;
+			//bottom is found?
+			if (pieces [i] [0] != null) {
+				go1 = pieces [i] [0];
+				found1 = true;
+			}
+			//top is found?
+			if(pieces[i][rows - 1] != null){
+				go2 = pieces [i] [rows-1];
+				found2 = true;
+			}
+			//both is found - break the loop
+			if(found1 && found2) break;
+		}
+		//if there is no set of 2 tiles -> active chain virus instead
+		if (!found1 || !found2) {
+			fuseVirusOn = false;
+		}
+		//gets the color of one of the 2 tiles
+		color = go1.GetComponent<Tile> ().name;
+
+		go1.GetComponent<SpriteRenderer> ().enabled = false;
+		go1.GetComponent<Tile> ().disableNeibor ();
+		go1.GetComponent<Tile> ().setDelete();
+
+		go2.GetComponent<SpriteRenderer> ().enabled = false;
+		go2.GetComponent<Tile> ().disableNeibor ();
+		go2.GetComponent<Tile> ().setDelete();
+
+		if (color == "blue") {
+			pieces[i][0] = (GameObject)Instantiate(cubes[0],new Vector3(i,0 - shiftSpace, 0), Quaternion.identity);
+			pieces[i][0].name = (nameCounter++).ToString();
+			blueOut++;
+			pieces[i][rows-1] = (GameObject)Instantiate(cubes[0],new Vector3(i,rows-1 - shiftSpace, 0), Quaternion.identity);
+			pieces[i][rows-1].name = (nameCounter++).ToString();
+			blueOut++;
+		} else if (color == "red") {
+			pieces[i][0] = (GameObject)Instantiate(cubes[1],new Vector3(i,0 - shiftSpace, 0 ), Quaternion.identity);
+			pieces[i][0].name = (nameCounter++).ToString();
+			redOut++;
+			pieces[i][rows-1] = (GameObject)Instantiate(cubes[0],new Vector3(i,rows-1 - shiftSpace, 0), Quaternion.identity);
+			pieces[i][rows-1].name = (nameCounter++).ToString();
+			redOut++;
+		} else if (color == "yellow") {
+			pieces[i][0] = (GameObject)Instantiate(cubes[2],new Vector3(i,0 - shiftSpace, 0 ), Quaternion.identity);
+			pieces[i][0].name = (nameCounter++).ToString();
+			yellowOut++;
+			pieces[i][rows-1] = (GameObject)Instantiate(cubes[0],new Vector3(i,rows-1 - shiftSpace, 0), Quaternion.identity);
+			pieces[i][rows-1].name = (nameCounter++).ToString();
+			yellowOut++;
+		} else { //addtional color goes here
+		}
+
+		pieces[i][0].GetComponent<SpriteRenderer> ().enabled = false;
+		pieces[i][rows-1].GetComponent<SpriteRenderer> ().enabled = false;
+
+		fuseVirusArrayUp[0] = (GameObject)Instantiate(fuseVirusesUp[0],new Vector3(i,0 - shiftSpace, 0), Quaternion.identity);
+		fuseVirusArrayDown[0] = (GameObject)Instantiate(fuseVirusesDown[0],new Vector3(i,rows-1 - shiftSpace, 0), Quaternion.identity);
+
+		if (color == "blue") {
+			fuseVirusArrayUp[0].GetComponent<SpriteRenderer>().color = Color.blue;
+			fuseVirusArrayDown[0].GetComponent<SpriteRenderer>().color = Color.blue;
+		} else if (color == "red") {
+			fuseVirusArrayUp[0].GetComponent<SpriteRenderer>().color = Color.red;
+			fuseVirusArrayDown[0].GetComponent<SpriteRenderer>().color = Color.red;
+		} else if (color == "yellow") {
+			fuseVirusArrayUp[0].GetComponent<SpriteRenderer>().color = Color.yellow;
+			fuseVirusArrayDown[0].GetComponent<SpriteRenderer>().color = Color.yellow;
+		} else { //addtional color goes here
+		}
+		//HERE UPDATE THE NEIBORING LINKS
+		for (int ii = 2; ii < totalCols; ii++) {
+			for (int jj = 0; jj < rows; jj++) {
+				if(pieces[ii][jj] != null){
+					pieces[ii][jj].GetComponent<Tile>().disableNeibor();
+				}
+			}
+		}
+		findNeiborsOnce = false;
+	}
+	//-------------------------------------------------------------------------------------------------------------------
+
 
 
 	//---------------------------------------------Mark Corruption-----------------------------------------------------------

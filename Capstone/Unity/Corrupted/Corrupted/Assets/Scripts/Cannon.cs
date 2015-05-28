@@ -72,7 +72,7 @@ public class Cannon : MonoBehaviour {
 				makeTile();
 			}
 		}
-		if (Input.GetMouseButtonUp(0) || Input.GetKeyUp(KeyCode.Space)) {
+		if (Input.GetMouseButtonUp(0) || Input.GetKeyUp(KeyCode.Space)){
 			//gameManager.GetComponent<GameManager>().pushArrayDown();
 			shot = false;
 		}

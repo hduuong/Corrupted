@@ -13,7 +13,7 @@ public class RowMeter : MonoBehaviour {
 	void Start () {
 		index = 9;
 		lastIndex = index;
-		pushedCols = 8;
+		pushedCols = 6;
 		meters = Resources.LoadAll ("Prefabs/Row Meter", typeof(GameObject));
 		gm = GameObject.Find ("GameManager");
 		rowMeter = (GameObject)Instantiate (meters[index], new Vector2(this.transform.position.x,this.transform.position.y), Quaternion.identity);
@@ -23,7 +23,7 @@ public class RowMeter : MonoBehaviour {
 	void Update () {
 		percentage = 100 - percentage_cal ();
 		index = (int)percentage / 10;
-		if (index < lastIndex) {
+		if (index < lastIndex && index >= 0) {
 			Destroy (rowMeter);
 			rowMeter = (GameObject)Instantiate (meters [index], new Vector2 (this.transform.position.x, this.transform.position.y), Quaternion.identity);
 			lastIndex = index;		

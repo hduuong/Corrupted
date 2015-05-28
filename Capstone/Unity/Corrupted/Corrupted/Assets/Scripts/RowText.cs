@@ -6,13 +6,16 @@ public class RowText : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		gm = GameObject.Find ("GameManager");
-		this.GetComponent<TextMesh> ().text = (gm.GetComponent<GameManager> ().cols - 8).ToString ();
+		this.GetComponent<TextMesh> ().text = (gm.GetComponent<GameManager> ().cols - 6).ToString ();
 	}
 	
 	// Update is called once per frame
 	public void change () {
 		string t = this.GetComponent<TextMesh> ().text;
-		int num = int.Parse (t) - 1;
+		int num = int.Parse (t);
+		if (num > 0) {
+			num--;
+		}
 		this.GetComponent<TextMesh> ().text = num.ToString ();
 	}
 }
