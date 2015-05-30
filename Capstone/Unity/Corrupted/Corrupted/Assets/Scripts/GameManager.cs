@@ -243,7 +243,7 @@ public class GameManager : MonoBehaviour {
 				burstVirusCount--;
 				if(burstVirusCount == 0){
 					burstVirusOn = false;
-					burstVirusCount = 6;
+					burstVirusCount = 5;
 					burstVirusExplodes();
 				}else{
 					int index = 0;
@@ -266,6 +266,30 @@ public class GameManager : MonoBehaviour {
 						i = (int)burstVirusArray[3].transform.position.x;
 						j = (int)burstVirusArray[3].transform.position.y + shiftSpace;
 						addBurstVirusHelper(color,i,j,index++);
+					}
+				}
+			}
+		}
+
+		if (fuseVirusOn) {
+			if(shootCount - lastshootCount > 0){
+				fuseVirusCount--;
+				if(fuseVirusCount == 0){
+					fuseVirusOn = false;
+					fuseVirusCount = 5;
+					fuseVirusExplodes();
+				}else{
+					int index = 4 - fuseVirusCount;
+					int i = (int)fuseVirusArrayUp[index].transform.position.x;
+					int j = (int)fuseVirusArrayUp[index].transform.position.y + shiftSpace;
+					int ii = (int)fuseVirusArrayDown[index].transform.position.x;
+					int jj = (int)fuseVirusArrayDown[index].transform.position.y + shiftSpace;
+					if(pieces[i][0] == null || pieces[ii][rows - 1] == null){
+						fuseVirusCleared();
+					}else{
+						string color = pieces[i][j].GetComponent<Tile>().name;
+						addfuseVirusHelper(color,i,j,index,0);
+						addfuseVirusHelper(color,ii,jj,index,1);
 					}
 				}
 			}
@@ -696,7 +720,17 @@ public class GameManager : MonoBehaviour {
 				burstVirusArray[i].transform.position = new Vector3(idx - 1,jdx,-2);
 			}
 		}
-
+		//PUSH the fuse Virus array
+		if (fuseVirusOn) {
+			for( int i = 0; i < 5; i++){
+				int idx = (int)fuseVirusArrayDown[i].transform.position.x;
+				int jdx = (int)fuseVirusArrayDown[i].transform.position.y;
+				fuseVirusArrayDown[i].transform.position = new Vector3(idx - 1,jdx,-2);
+				idx = (int)fuseVirusArrayUp[i].transform.position.x;
+				jdx = (int)fuseVirusArrayUp[i].transform.position.y;
+				fuseVirusArrayUp[i].transform.position = new Vector3(idx - 1,jdx,-2);
+			}
+		}
 	}
 	//delete all tile lands on fire wall
 	public void deleteAtFireWall(){
@@ -938,21 +972,21 @@ public class GameManager : MonoBehaviour {
 			pieces[i][0] = (GameObject)Instantiate(cubes[1],new Vector3(i,0 - shiftSpace, 0 ), Quaternion.identity);
 			pieces[i][0].name = (nameCounter++).ToString();
 			redOut++;
-			pieces[i][rows-1] = (GameObject)Instantiate(cubes[0],new Vector3(i,rows-1 - shiftSpace, 0), Quaternion.identity);
+			pieces[i][rows-1] = (GameObject)Instantiate(cubes[1],new Vector3(i,rows-1 - shiftSpace, 0), Quaternion.identity);
 			pieces[i][rows-1].name = (nameCounter++).ToString();
 			redOut++;
 		} else if (color == "yellow") {
 			pieces[i][0] = (GameObject)Instantiate(cubes[2],new Vector3(i,0 - shiftSpace, 0 ), Quaternion.identity);
 			pieces[i][0].name = (nameCounter++).ToString();
 			yellowOut++;
-			pieces[i][rows-1] = (GameObject)Instantiate(cubes[0],new Vector3(i,rows-1 - shiftSpace, 0), Quaternion.identity);
+			pieces[i][rows-1] = (GameObject)Instantiate(cubes[2],new Vector3(i,rows-1 - shiftSpace, 0), Quaternion.identity);
 			pieces[i][rows-1].name = (nameCounter++).ToString();
 			yellowOut++;
 		} else { //addtional color goes here
 		}
 
-		pieces[i][0].GetComponent<SpriteRenderer> ().enabled = false;
-		pieces[i][rows-1].GetComponent<SpriteRenderer> ().enabled = false;
+		//pieces[i][0].GetComponent<SpriteRenderer> ().enabled = false;
+		//pieces[i][rows-1].GetComponent<SpriteRenderer> ().enabled = false;
 
 		fuseVirusArrayUp[0] = (GameObject)Instantiate(fuseVirusesUp[0],new Vector3(i,0 - shiftSpace, 0), Quaternion.identity);
 		fuseVirusArrayDown[0] = (GameObject)Instantiate(fuseVirusesDown[0],new Vector3(i,rows-1 - shiftSpace, 0), Quaternion.identity);
@@ -968,6 +1002,120 @@ public class GameManager : MonoBehaviour {
 			fuseVirusArrayDown[0].GetComponent<SpriteRenderer>().color = Color.yellow;
 		} else { //addtional color goes here
 		}
+		//HERE UPDATE THE NEIBORING LINKS
+		for (int ii = 2; ii < totalCols; ii++) {
+			for (int jj = 0; jj < rows; jj++) {
+				if(pieces[ii][jj] != null){
+					pieces[ii][jj].GetComponent<Tile>().disableNeibor();
+				}
+			}
+		}
+		findNeiborsOnce = false;
+	}
+
+	private void addfuseVirusHelper(string color,int i,int j, int index, int dir){
+		int jj = j;
+		GameObject go = null;
+		if(dir == 1){
+			GameObject temp = fuseVirusArrayDown [index];
+			temp.transform.position = new Vector3 (temp.transform.position.x, temp.transform.position.y - 1, -2);
+			fuseVirusArrayDown [index+1] = temp;
+			fuseVirusArrayDown [index] = (GameObject)Instantiate(fuseVirusesDown[1],new Vector3(i, j - shiftSpace, 0), Quaternion.identity);
+			go = fuseVirusArrayDown [index];
+			jj--;
+		}else{
+			GameObject temp = fuseVirusArrayUp [index];
+			temp.transform.position = new Vector3 (temp.transform.position.x, temp.transform.position.y + 1, -2);
+			fuseVirusArrayUp [index+1] = temp;
+			fuseVirusArrayUp [index] = (GameObject)Instantiate(fuseVirusesUp[1],new Vector3(i, j - shiftSpace, 0), Quaternion.identity);
+			go = fuseVirusArrayUp [index];
+			jj++;
+		}
+		if (pieces [i] [jj] != null) {
+			pieces [i] [jj].GetComponent<SpriteRenderer> ().enabled = false;
+			pieces [i] [jj].GetComponent<Tile> ().disableNeibor ();
+			pieces [i] [jj].GetComponent<Tile> ().setDelete ();
+		}
+		if (color == "red") {
+			pieces[i][jj] = (GameObject)Instantiate(cubes[1],new Vector3(i,jj - shiftSpace, 0 ), Quaternion.identity);
+			pieces[i][jj].name = (nameCounter++).ToString();
+			redOut++;
+			go.GetComponent<SpriteRenderer>().color = Color.red;
+		} else if (color == "blue") {
+			pieces[i][jj] = (GameObject)Instantiate(cubes[0],new Vector3(i,jj - shiftSpace, 0), Quaternion.identity);
+			pieces[i][jj].name = (nameCounter++).ToString();
+			blueOut++;
+			go.GetComponent<SpriteRenderer>().color = Color.blue;
+		} else if (color == "yellow") {
+			pieces[i][jj] = (GameObject)Instantiate(cubes[2],new Vector3(i,jj - shiftSpace, 0 ), Quaternion.identity);
+			pieces[i][jj].name = (nameCounter++).ToString();
+			yellowOut++;
+			go.GetComponent<SpriteRenderer>().color = Color.yellow;
+		} else {
+
+		}
+		pieces[i][jj].GetComponent<SpriteRenderer> ().enabled = true;
+	}
+	void fuseVirusCleared(){
+		for (int i = 0; i < fuseVirusArrayDown.Length; i++) {
+			if(fuseVirusArrayDown[i] != null){
+				Destroy(fuseVirusArrayDown[i]);
+				fuseVirusArrayDown[i] = null;
+			}
+			if(fuseVirusArrayUp[i] != null){
+				Destroy(fuseVirusArrayUp[i]);
+				fuseVirusArrayUp[i] = null;
+			}
+		}
+		fuseVirusOn = false;
+		fuseVirusCount = 5;
+	}
+
+	void fuseVirusExplodes(){
+		Vector2 v1 = fuseVirusArrayDown [0].transform.position;
+		Vector2 v2 = fuseVirusArrayDown [1].transform.position;
+		Vector2 v3 = fuseVirusArrayDown [2].transform.position;
+		Vector2 v4 = fuseVirusArrayDown [3].transform.position;
+		Vector2 v5 = fuseVirusArrayDown [4].transform.position;
+		Vector2 v11 = fuseVirusArrayUp [0].transform.position;
+		Vector2 v22 = fuseVirusArrayUp [1].transform.position;
+		Vector2 v33 = fuseVirusArrayUp [2].transform.position;
+		Vector2 v44 = fuseVirusArrayUp [3].transform.position;
+		Vector2 v55 = fuseVirusArrayUp [4].transform.position;
+
+		Destroy (fuseVirusArrayDown [0]);
+		Destroy (fuseVirusArrayDown [1]);
+		Destroy (fuseVirusArrayDown [2]);
+		Destroy (fuseVirusArrayDown [3]);
+		Destroy(fuseVirusArrayDown [4]);
+		Destroy(fuseVirusArrayUp [0]);
+		Destroy(fuseVirusArrayUp [1]);
+		Destroy(fuseVirusArrayUp [2]);
+		Destroy(fuseVirusArrayUp [3]);
+		Destroy(fuseVirusArrayUp [4]);
+
+		fuseVirusArrayDown [0] = null;
+		fuseVirusArrayDown [1] = null;
+		fuseVirusArrayDown [2] = null;
+		fuseVirusArrayDown [3] = null;
+		fuseVirusArrayDown [4] = null;
+		fuseVirusArrayUp [0] = null;
+		fuseVirusArrayUp [1] = null;
+		fuseVirusArrayUp [2] = null;
+		fuseVirusArrayUp [3] = null;
+		fuseVirusArrayUp [4] = null;
+
+		markCorruption ((int)v1.x,(int)v1.y+shiftSpace);
+		markCorruption ((int)v2.x,(int)v2.y+shiftSpace);
+		markCorruption ((int)v3.x,(int)v3.y+shiftSpace);
+		markCorruption ((int)v4.x,(int)v4.y+shiftSpace);
+		markCorruption ((int)v5.x,(int)v5.y+shiftSpace);
+		markCorruption ((int)v11.x,(int)v11.y+shiftSpace);
+		markCorruption ((int)v22.x,(int)v22.y+shiftSpace);
+		markCorruption ((int)v33.x,(int)v33.y+shiftSpace);
+		markCorruption ((int)v44.x,(int)v44.y+shiftSpace);
+		markCorruption ((int)v55.x,(int)v55.y+shiftSpace);
+
 		//HERE UPDATE THE NEIBORING LINKS
 		for (int ii = 2; ii < totalCols; ii++) {
 			for (int jj = 0; jj < rows; jj++) {
