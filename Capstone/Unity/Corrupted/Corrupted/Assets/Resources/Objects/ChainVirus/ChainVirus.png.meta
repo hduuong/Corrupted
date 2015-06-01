@@ -1,0 +1,165 @@
+fileFormatVersion: 2
+guid: c00538f1e122e88438de480f1096ca2c
+timeCreated: 1433054092
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: ChainVirus_0
+    21300002: ChainVirus_1
+    21300004: ChainVirus_2
+    21300006: ChainVirus_3
+    21300008: ChainVirus_4
+    21300010: ChainVirus_5
+    21300012: ChainVirus_6
+    21300014: ChainVirus_7
+    21300016: ChainVirus_8
+    21300018: ChainVirus_9
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 8
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: ChainVirus_0
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 2
+        width: 68
+        height: 68
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: ChainVirus_1
+      rect:
+        serializedVersion: 2
+        x: 74
+        y: 2
+        width: 68
+        height: 68
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: ChainVirus_2
+      rect:
+        serializedVersion: 2
+        x: 146
+        y: 2
+        width: 68
+        height: 68
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: ChainVirus_3
+      rect:
+        serializedVersion: 2
+        x: 218
+        y: 2
+        width: 68
+        height: 68
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: ChainVirus_4
+      rect:
+        serializedVersion: 2
+        x: 290
+        y: 2
+        width: 68
+        height: 68
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: ChainVirus_5
+      rect:
+        serializedVersion: 2
+        x: 362
+        y: 2
+        width: 68
+        height: 68
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: ChainVirus_6
+      rect:
+        serializedVersion: 2
+        x: 434
+        y: 2
+        width: 68
+        height: 68
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: ChainVirus_7
+      rect:
+        serializedVersion: 2
+        x: 506
+        y: 2
+        width: 68
+        height: 68
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: ChainVirus_8
+      rect:
+        serializedVersion: 2
+        x: 578
+        y: 2
+        width: 68
+        height: 68
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: ChainVirus_9
+      rect:
+        serializedVersion: 2
+        x: 650
+        y: 2
+        width: 68
+        height: 68
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

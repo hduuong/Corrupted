@@ -42,6 +42,11 @@ public class GameManager : MonoBehaviour {
 	public bool fuseVirusOn;     //bool flag for when burst Virus is On
 	public int fuseVirusCount;   //counter for how long fuse virus will stay
 
+	public bool chainVirusOn;    //bool flag for when burst Virus is On
+	public GameObject chainVirusHead; //a pointer to the head of the chain virus
+	public int chainVirusIndex;       //an index to add in the chain virus game object into the array
+	public GameObject[] chainVirusArray;//the array that keeps track of all chain viruses
+
 	public bool healOn;           //bool flag for when healing is in effect
 	public GameObject healedTile; //a pointer to where the last healed game object
 	public GameObject healingAnim;//a pointer to the healing object with animation
@@ -52,10 +57,13 @@ public class GameManager : MonoBehaviour {
 		firewallisOn = false;
 		burstVirusOn = false;
 		fuseVirusOn = false;
+		chainVirusOn = false;
 		healOn = false;
 		visibleCols = offsetSpace + 6;     //8 is the number of visible cols at game start
 		burstVirusCount = 5;
 		fuseVirusCount = 5;
+		chainVirusIndex = 0;
+		chainVirusArray = new GameObject[100];
 		redOut = 0;
 		blueOut = 0;
 		yellowOut = 0;
@@ -212,7 +220,7 @@ public class GameManager : MonoBehaviour {
 		//Initializing the tile count for all tile created at game start
 		if (!findTileCountOnce) {
 			redOut = 0;
-			blueOut =0;
+			blueOut = 0;
 			yellowOut = 0;
 			for (int i = 2; i < totalCols; i++) {
 				for (int j = 0; j < rows; j++) {
@@ -231,7 +239,7 @@ public class GameManager : MonoBehaviour {
 		if (player.GetComponent<Cannon> ().shot && laserFireUpdate > 0) {
 			updateLaser ();
 			laserFireUpdate--;
-		} else if (!player.GetComponent<Cannon> ().shot && laserFireUpdate <= 0){
+		} else if (!player.GetComponent<Cannon> ().shot && laserFireUpdate <= 0) {
 			laserFireUpdate = 5;
 		}
 
@@ -239,61 +247,159 @@ public class GameManager : MonoBehaviour {
 
 		//when burstVirus is in the game
 		if (burstVirusOn) {
-			if(shootCount - lastshootCount > 0){
+			if (shootCount - lastshootCount > 0) {
 				burstVirusCount--;
-				if(burstVirusCount == 0){
+				if (burstVirusCount == 0) {
 					burstVirusOn = false;
 					burstVirusCount = 5;
-					burstVirusExplodes();
-				}else{
+					burstVirusExplodes ();
+				} else {
 					int index = 0;
-					int i = (int)burstVirusArray[0].transform.position.x;
-					int j = (int)burstVirusArray[0].transform.position.y + shiftSpace;
-					if(pieces[i][j] == null){
-						burstVirusCleared();
-					}else{
-						string color = pieces[i][j].GetComponent<Tile>().name;
-						addBurstVirusHelper(color,i,j,index++);
+					int i = (int)burstVirusArray [0].transform.position.x;
+					int j = (int)burstVirusArray [0].transform.position.y + shiftSpace;
+					if (pieces [i] [j] == null) {
+						burstVirusCleared ();
+					} else {
+						string color = pieces [i] [j].GetComponent<Tile> ().name;
+						addBurstVirusHelper (color, i, j, index++);
 
-						i = (int)burstVirusArray[1].transform.position.x;
-						j = (int)burstVirusArray[1].transform.position.y + shiftSpace;
-						addBurstVirusHelper(color,i,j,index++);
+						i = (int)burstVirusArray [1].transform.position.x;
+						j = (int)burstVirusArray [1].transform.position.y + shiftSpace;
+						addBurstVirusHelper (color, i, j, index++);
 
-						i = (int)burstVirusArray[2].transform.position.x;
-						j = (int)burstVirusArray[2].transform.position.y + shiftSpace;
-						addBurstVirusHelper(color,i,j,index++);
+						i = (int)burstVirusArray [2].transform.position.x;
+						j = (int)burstVirusArray [2].transform.position.y + shiftSpace;
+						addBurstVirusHelper (color, i, j, index++);
 						
-						i = (int)burstVirusArray[3].transform.position.x;
-						j = (int)burstVirusArray[3].transform.position.y + shiftSpace;
-						addBurstVirusHelper(color,i,j,index++);
+						i = (int)burstVirusArray [3].transform.position.x;
+						j = (int)burstVirusArray [3].transform.position.y + shiftSpace;
+						addBurstVirusHelper (color, i, j, index++);
 					}
 				}
 			}
 		}
-
+		//when fuseVirus is in the game
 		if (fuseVirusOn) {
-			if(shootCount - lastshootCount > 0){
+			if (shootCount - lastshootCount > 0) {
 				fuseVirusCount--;
-				if(fuseVirusCount == 0){
+				if (fuseVirusCount == 0) {
 					fuseVirusOn = false;
 					fuseVirusCount = 5;
-					fuseVirusExplodes();
-				}else{
+					fuseVirusExplodes ();
+				} else {
 					int index = 4 - fuseVirusCount;
-					int i = (int)fuseVirusArrayUp[index].transform.position.x;
-					int j = (int)fuseVirusArrayUp[index].transform.position.y + shiftSpace;
-					int ii = (int)fuseVirusArrayDown[index].transform.position.x;
-					int jj = (int)fuseVirusArrayDown[index].transform.position.y + shiftSpace;
-					if(pieces[i][0] == null || pieces[ii][rows - 1] == null){
-						fuseVirusCleared();
-					}else{
-						string color = pieces[i][j].GetComponent<Tile>().name;
-						addfuseVirusHelper(color,i,j,index,0);
-						addfuseVirusHelper(color,ii,jj,index,1);
+					int i = (int)fuseVirusArrayUp [index].transform.position.x;
+					int j = (int)fuseVirusArrayUp [index].transform.position.y + shiftSpace;
+					int ii = (int)fuseVirusArrayDown [index].transform.position.x;
+					int jj = (int)fuseVirusArrayDown [index].transform.position.y + shiftSpace;
+					if (pieces [i] [0] == null || pieces [ii] [rows - 1] == null) {
+						fuseVirusCleared ();
+					} else {
+						string color = pieces [i] [j].GetComponent<Tile> ().name;
+						addfuseVirusHelper (color, i, j, index, 0);
+						addfuseVirusHelper (color, ii, jj, index, 1);
 					}
 				}
 			}
 		}
+		//when chainVirus is in the game
+		if (chainVirusOn) {
+			if (shootCount - lastshootCount > 0) {
+				int i = (int)chainVirusHead.transform.position.x;
+				int j = (int)chainVirusHead.transform.position.y + shiftSpace;
+				if(pieces[i][j] == null){
+					chainVirusCleared();
+					chainVirusOn = false;
+				}else{
+					string color = pieces[i][j].GetComponent<Tile>().name;
+					int neiborCount = pieces[i][j].GetComponent<Tile>().neiborsCount;
+					// mark corruption for the previous infected tiles
+					for(int idx = 0; idx < chainVirusIndex; idx++){
+						int ii = (int)chainVirusArray[idx].transform.position.x;
+						int jj = (int)chainVirusArray[idx].transform.position.y + shiftSpace;
+						if(corruptedArray[ii][jj] == null){
+							addCorruption(ii,jj);
+						}
+					}
+					if(neiborCount == 0){
+						if(pieces[i-1][j] != null){
+							pieces[i-1][j].GetComponent<Tile>().disableNeibor();
+							pieces[i-1][j].GetComponent<SpriteRenderer>().enabled = false;
+							pieces[i-1][j].GetComponent<Tile>().setDelete();
+						}
+						if (color == "red") {
+							pieces[i-1][j] = (GameObject)Instantiate(cubes[1],new Vector3(i-1,j - shiftSpace, 0 ), Quaternion.identity);
+							pieces[i-1][j].name = (nameCounter++).ToString();
+							redOut++;
+						} else if (color == "blue") {
+							pieces[i-1][j] = (GameObject)Instantiate(cubes[0],new Vector3(i-1,j - shiftSpace, 0), Quaternion.identity);
+							pieces[i-1][j].name = (nameCounter++).ToString();
+							blueOut++;
+						} else if (color == "yellow") {
+							pieces[i-1][j] = (GameObject)Instantiate(cubes[2],new Vector3(i-1,j - shiftSpace, 0 ), Quaternion.identity);
+							pieces[i-1][j].name = (nameCounter++).ToString();
+							yellowOut++;
+						} else { //additional color goes here
+
+						}
+						chainVirusHead = (GameObject)Instantiate(Resources.Load("Prefabs/ChainVirus/ChainVirus", typeof(GameObject)),new Vector3(i-1, j - shiftSpace, -2), Quaternion.identity);
+						chainVirusArray[chainVirusIndex++] = chainVirusHead;
+
+						//HERE UPDATE THE NEIBORING LINKS
+						for (int ii = 2; ii < totalCols; ii++) {
+							for (int jj = 0; jj < rows; jj++) {
+								if(pieces[ii][jj] != null){
+									pieces[ii][jj].GetComponent<Tile>().disableNeibor();
+								}
+							}
+						}
+						findNeiborsOnce = false;
+					}else{
+						GameObject[] neibors = pieces[i][j].GetComponent<Tile>().neibors;
+						int m = (int)neibors[0].transform.position.x;
+						int n = (int)neibors[0].transform.position.y + shiftSpace;
+						if(corruptedArray[m][n] != null){
+							if(pieces[i-1][j] != null){
+								pieces[i-1][j].GetComponent<Tile>().disableNeibor();
+								pieces[i-1][j].GetComponent<SpriteRenderer>().enabled = false;
+								pieces[i-1][j].GetComponent<Tile>().setDelete();
+							}
+							if (color == "red") {
+								pieces[i-1][j] = (GameObject)Instantiate(cubes[1],new Vector3(i-1,j - shiftSpace, 0 ), Quaternion.identity);
+								pieces[i-1][j].name = (nameCounter++).ToString();
+								redOut++;
+							} else if (color == "blue") {
+								pieces[i-1][j] = (GameObject)Instantiate(cubes[0],new Vector3(i-1,j - shiftSpace, 0), Quaternion.identity);
+								pieces[i-1][j].name = (nameCounter++).ToString();
+								blueOut++;
+							} else if (color == "yellow") {
+								pieces[i-1][j] = (GameObject)Instantiate(cubes[2],new Vector3(i-1,j - shiftSpace, 0 ), Quaternion.identity);
+								pieces[i-1][j].name = (nameCounter++).ToString();
+								yellowOut++;
+							} else { //additional color goes here
+								
+							}
+							chainVirusHead = (GameObject)Instantiate(Resources.Load("Prefabs/ChainVirus/ChainVirus", typeof(GameObject)),new Vector3(i-1, j - shiftSpace, -2), Quaternion.identity);
+							chainVirusArray[chainVirusIndex++] = chainVirusHead;
+						}else{
+							GameObject[] list = new GameObject[256 * 5];
+							chainVirusFinder(i,j,ref list);
+							addChainVirusHelper(list);
+							//find the head of the chainArray
+							int min = 999;
+							for(int idx = 0; idx < chainVirusIndex; idx++){
+								int ii = (int)chainVirusArray[idx].transform.position.x;
+								if(ii < min){
+									min = ii;
+									chainVirusHead = chainVirusArray[idx];
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
 		//Healing is in active
 		if (healOn) {
 			if(shootCount - lastshootCount > 0){
@@ -371,6 +477,12 @@ public class GameManager : MonoBehaviour {
 		if(Input.GetKeyUp(KeyCode.F)){
 			addFuseVirus();
 			fuseVirusOn = true;
+		}
+
+		//pressed this key to add BurstVirus --- for testing only
+		if(Input.GetKeyUp(KeyCode.C)){
+			addChainVirus();
+			chainVirusOn = true;
 		}
 
 		//pressed Mouse right to Heal if meter is full.
@@ -459,6 +571,18 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 
+	public void chainVirusFinder(int i, int j, ref GameObject[] list){
+		if (i < 0 || i > totalCols - 1) 
+			return;
+		if (j < 0 || j > rows - 1)
+			return;
+
+		string name = pieces [i] [j].GetComponent<Tile> ().name;
+		int count = 0;
+		//call helper method to find and add more gameObject to the list
+		deleteHelper (ref list, name, i, j, ref count);
+	}
+
 	//------------------------------------------------------CODE FOR DELETING/CLEARING THE TILE----------------------------------
 	/**
 	 * go through the entire list of gameObject and delete them if they are linked up
@@ -483,7 +607,7 @@ public class GameManager : MonoBehaviour {
 			clearCount++;
 			repairMeter.GetComponent<RepairMeter>().index++;
 
-			for(int idx = 0; idx < 256*2; idx++){
+			for(int idx = 0; idx < 256*5; idx++){
 				if(list[idx] != null)
 					list[idx].GetComponent<Tile>().setDelete();
 			}
@@ -729,6 +853,14 @@ public class GameManager : MonoBehaviour {
 				idx = (int)fuseVirusArrayUp[i].transform.position.x;
 				jdx = (int)fuseVirusArrayUp[i].transform.position.y;
 				fuseVirusArrayUp[i].transform.position = new Vector3(idx - 1,jdx,-2);
+			}
+		}
+		//PUSH the chain Virus array
+		if (chainVirusOn) {
+			for( int i = 0; i < chainVirusIndex; i++){
+				int idx = (int)chainVirusArray[i].transform.position.x;
+				int jdx = (int)chainVirusArray[i].transform.position.y;
+				chainVirusArray[i].transform.position = new Vector3(idx - 1,jdx,-2);
 			}
 		}
 	}
@@ -1128,7 +1260,33 @@ public class GameManager : MonoBehaviour {
 	}
 	//-------------------------------------------------------------------------------------------------------------------
 
+	//---------------------------------------------Chain Virus-----------------------------------------------------------
+	public void addChainVirus(){
+		int j = Random.Range (0, rows);
+		int i = visibleCols-1;
+		chainVirusHead = (GameObject)Instantiate(Resources.Load("Prefabs/ChainVirus/ChainVirus", typeof(GameObject)),new Vector3(i, j - shiftSpace, -2), Quaternion.identity);
+		chainVirusArray [chainVirusIndex++] = chainVirusHead;
+	}
 
+	public void chainVirusCleared(){
+		for(int i = 0; i <= chainVirusIndex; i++){
+			Destroy(chainVirusArray[i]);
+			chainVirusArray[i] = null;
+		}
+		chainVirusHead = null;
+	}
+
+	public void addChainVirusHelper(GameObject[] list){
+		for(int idx = 0; idx < list.Length; idx++){
+			if(list[idx]!= null){
+				int ii = (int)list[idx].transform.position.x;
+				int jj = (int)list[idx].transform.position.y + shiftSpace;
+				chainVirusHead = (GameObject)Instantiate(Resources.Load("Prefabs/ChainVirus/ChainVirus", typeof(GameObject)),new Vector3(ii, jj - shiftSpace, -2), Quaternion.identity);
+				chainVirusArray[chainVirusIndex++] = chainVirusHead;
+			}
+		}
+	}
+	//-------------------------------------------------------------------------------------------------------------------
 
 	//---------------------------------------------Mark Corruption-----------------------------------------------------------
 	public void markCorruption(int i, int j){
@@ -1142,6 +1300,16 @@ public class GameManager : MonoBehaviour {
 			pieces[i][j].GetComponent<Tile>().disableNeibor();
 			pieces[i][j].GetComponent<Tile>().setDelete();
 		}
+		corruptedArray[i][j] = (GameObject)Instantiate(Resources.Load("Prefabs/Corrupted", typeof(GameObject)),new Vector3(i,j - shiftSpace, -2 ), Quaternion.identity);
+		corruptionCount++;
+	}
+	public void addCorruption(int i, int j){
+		if (i < 0 || i > totalCols-1) 
+			return;
+		if (j < 0 || j > rows-1)
+			return;
+		if (corruptedArray [i] [j] != null)
+			return;
 		corruptedArray[i][j] = (GameObject)Instantiate(Resources.Load("Prefabs/Corrupted", typeof(GameObject)),new Vector3(i,j - shiftSpace, -2 ), Quaternion.identity);
 		corruptionCount++;
 	}
